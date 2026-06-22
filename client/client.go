@@ -8,9 +8,9 @@ import (
 	antchainutil "github.com/antchain-openapi-sdk-go/antchain-util/service"
 )
 
-/**
- * Model for initing client
- */
+// Description:
+//
+// Model for initing client
 type Config struct {
 	// accesskey id
 	AccessKeyId *string `json:"accessKeyId,omitempty" xml:"accessKeyId,omitempty"`
@@ -19,26 +19,66 @@ type Config struct {
 	// security token
 	SecurityToken *string `json:"securityToken,omitempty" xml:"securityToken,omitempty"`
 	// http protocol
+	//
+	// example:
+	//
+	// http
 	Protocol *string `json:"protocol,omitempty" xml:"protocol,omitempty"`
 	// read timeout
+	//
+	// example:
+	//
+	// 10
 	ReadTimeout *int `json:"readTimeout,omitempty" xml:"readTimeout,omitempty"`
 	// connect timeout
+	//
+	// example:
+	//
+	// 10
 	ConnectTimeout *int `json:"connectTimeout,omitempty" xml:"connectTimeout,omitempty"`
 	// http proxy
+	//
+	// example:
+	//
+	// http://localhost
 	HttpProxy *string `json:"httpProxy,omitempty" xml:"httpProxy,omitempty"`
 	// https proxy
+	//
+	// example:
+	//
+	// https://localhost
 	HttpsProxy *string `json:"httpsProxy,omitempty" xml:"httpsProxy,omitempty"`
 	// endpoint
+	//
+	// example:
+	//
+	// cs.aliyuncs.com
 	Endpoint *string `json:"endpoint,omitempty" xml:"endpoint,omitempty"`
 	// proxy white list
+	//
+	// example:
+	//
+	// http://localhost
 	NoProxy *string `json:"noProxy,omitempty" xml:"noProxy,omitempty"`
 	// max idle conns
+	//
+	// example:
+	//
+	// 3
 	MaxIdleConns *int `json:"maxIdleConns,omitempty" xml:"maxIdleConns,omitempty"`
 	// user agent
+	//
+	// example:
+	//
+	// Alibabacloud/1
 	UserAgent *string `json:"userAgent,omitempty" xml:"userAgent,omitempty"`
 	// socks5 proxy
 	Socks5Proxy *string `json:"socks5Proxy,omitempty" xml:"socks5Proxy,omitempty"`
 	// socks5 network
+	//
+	// example:
+	//
+	// TCP
 	Socks5NetWork *string `json:"socks5NetWork,omitempty" xml:"socks5NetWork,omitempty"`
 	// 长链接最大空闲时长
 	MaxIdleTimeMillis *int `json:"maxIdleTimeMillis,omitempty" xml:"maxIdleTimeMillis,omitempty"`
@@ -533,6 +573,84 @@ func (s *QueryTestaTestbResponse) SetResultMsg(v string) *QueryTestaTestbRespons
 	return s
 }
 
+type AWorkbenchTestRequest struct {
+	// OAuth模式下的授权token
+	AuthToken *string `json:"auth_token,omitempty" xml:"auth_token,omitempty"`
+	// 超时时间
+	Timeout *string `json:"timeout,omitempty" xml:"timeout,omitempty" require:"true"`
+	// param
+	Param *string `json:"param,omitempty" xml:"param,omitempty" require:"true"`
+	// owner
+	Owner *string `json:"owner,omitempty" xml:"owner,omitempty"`
+}
+
+func (s AWorkbenchTestRequest) String() string {
+	return tea.Prettify(s)
+}
+
+func (s AWorkbenchTestRequest) GoString() string {
+	return s.String()
+}
+
+func (s *AWorkbenchTestRequest) SetAuthToken(v string) *AWorkbenchTestRequest {
+	s.AuthToken = &v
+	return s
+}
+
+func (s *AWorkbenchTestRequest) SetTimeout(v string) *AWorkbenchTestRequest {
+	s.Timeout = &v
+	return s
+}
+
+func (s *AWorkbenchTestRequest) SetParam(v string) *AWorkbenchTestRequest {
+	s.Param = &v
+	return s
+}
+
+func (s *AWorkbenchTestRequest) SetOwner(v string) *AWorkbenchTestRequest {
+	s.Owner = &v
+	return s
+}
+
+type AWorkbenchTestResponse struct {
+	// 请求唯一ID，用于链路跟踪和问题排查
+	ReqMsgId *string `json:"req_msg_id,omitempty" xml:"req_msg_id,omitempty"`
+	// 结果码，一般OK表示调用成功
+	ResultCode *string `json:"result_code,omitempty" xml:"result_code,omitempty"`
+	// 异常信息的文本描述
+	ResultMsg *string `json:"result_msg,omitempty" xml:"result_msg,omitempty"`
+	// 状态
+	Status *string `json:"status,omitempty" xml:"status,omitempty"`
+}
+
+func (s AWorkbenchTestResponse) String() string {
+	return tea.Prettify(s)
+}
+
+func (s AWorkbenchTestResponse) GoString() string {
+	return s.String()
+}
+
+func (s *AWorkbenchTestResponse) SetReqMsgId(v string) *AWorkbenchTestResponse {
+	s.ReqMsgId = &v
+	return s
+}
+
+func (s *AWorkbenchTestResponse) SetResultCode(v string) *AWorkbenchTestResponse {
+	s.ResultCode = &v
+	return s
+}
+
+func (s *AWorkbenchTestResponse) SetResultMsg(v string) *AWorkbenchTestResponse {
+	s.ResultMsg = &v
+	return s
+}
+
+func (s *AWorkbenchTestResponse) SetStatus(v string) *AWorkbenchTestResponse {
+	s.Status = &v
+	return s
+}
+
 type Client struct {
 	Endpoint                *string
 	RegionId                *string
@@ -555,10 +673,11 @@ type Client struct {
 	MaxRequestsPerHost      *int
 }
 
-/**
- * Init client with Config
- * @param config config contains the necessary information to create a client
- */
+// Description:
+//
+// # Init client with Config
+//
+// @param config - config contains the necessary information to create a client
 func NewClient(config *Config) (*Client, error) {
 	client := new(Client)
 	err := client.Init(config)
@@ -566,7 +685,7 @@ func NewClient(config *Config) (*Client, error) {
 }
 
 func (client *Client) Init(config *Config) (_err error) {
-	if tea.BoolValue(util.IsUnset(tea.ToMap(config))) {
+	if tea.BoolValue(util.IsUnset(config)) {
 		_err = tea.NewSDKError(map[string]interface{}{
 			"code":    "ParameterMissing",
 			"message": "'config' can not be unset",
@@ -595,16 +714,23 @@ func (client *Client) Init(config *Config) (_err error) {
 	return nil
 }
 
-/**
- * Encapsulate the request and invoke the network
- * @param action api name
- * @param protocol http or https
- * @param method e.g. GET
- * @param pathname pathname of every api
- * @param request which contains request params
- * @param runtime which controls some details of call api, such as retry times
- * @return the response
- */
+// Description:
+//
+// # Encapsulate the request and invoke the network
+//
+// @param action - api name
+//
+// @param protocol - http or https
+//
+// @param method - e.g. GET
+//
+// @param pathname - pathname of every api
+//
+// @param request - which contains request params
+//
+// @param runtime - which controls some details of call api, such as retry times
+//
+// @return the response
 func (client *Client) DoRequest(version *string, action *string, protocol *string, method *string, pathname *string, request map[string]interface{}, headers map[string]*string, runtime *util.RuntimeOptions) (_result map[string]interface{}, _err error) {
 	_err = tea.Validate(runtime)
 	if _err != nil {
@@ -655,7 +781,7 @@ func (client *Client) DoRequest(version *string, action *string, protocol *strin
 				"req_msg_id":       antchainutil.GetNonce(),
 				"access_key":       client.AccessKeyId,
 				"base_sdk_version": tea.String("TeaSDK-2.0"),
-				"sdk_version":      tea.String("1.0.2"),
+				"sdk_version":      tea.String("1.0.5"),
 				"_prod_code":       tea.String("CAT"),
 				"_prod_channel":    tea.String("undefined"),
 			}
@@ -713,10 +839,11 @@ func (client *Client) DoRequest(version *string, action *string, protocol *strin
 	return _resp, _err
 }
 
-/**
- * Description: 这接口用于获取猫猫的年龄
- * Summary: 获取猫猫的年龄
- */
+// Description:
+//
+// Description: 这接口用于获取猫猫的年龄
+//
+// Summary: 获取猫猫的年龄
 func (client *Client) GetAge(request *GetAgeRequest) (_result *GetAgeResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -729,10 +856,11 @@ func (client *Client) GetAge(request *GetAgeRequest) (_result *GetAgeResponse, _
 	return _result, _err
 }
 
-/**
- * Description: 这接口用于获取猫猫的年龄
- * Summary: 获取猫猫的年龄
- */
+// Description:
+//
+// Description: 这接口用于获取猫猫的年龄
+//
+// Summary: 获取猫猫的年龄
 func (client *Client) GetAgeEx(request *GetAgeRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *GetAgeResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -747,10 +875,11 @@ func (client *Client) GetAgeEx(request *GetAgeRequest, headers map[string]*strin
 	return _result, _err
 }
 
-/**
- * Description: s d
- * Summary: s d f
- */
+// Description:
+//
+// Description: s d
+//
+// Summary: s d f
 func (client *Client) WithdrawLoadtestTest(request *WithdrawLoadtestTestRequest) (_result *WithdrawLoadtestTestResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -763,10 +892,11 @@ func (client *Client) WithdrawLoadtestTest(request *WithdrawLoadtestTestRequest)
 	return _result, _err
 }
 
-/**
- * Description: s d
- * Summary: s d f
- */
+// Description:
+//
+// Description: s d
+//
+// Summary: s d f
 func (client *Client) WithdrawLoadtestTestEx(request *WithdrawLoadtestTestRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *WithdrawLoadtestTestResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -781,10 +911,11 @@ func (client *Client) WithdrawLoadtestTestEx(request *WithdrawLoadtestTestReques
 	return _result, _err
 }
 
-/**
- * Description: huanyue
- * Summary: huanyu
- */
+// Description:
+//
+// Description: huanyue
+//
+// Summary: huanyu
 func (client *Client) BindHuanyu(request *BindHuanyuRequest) (_result *BindHuanyuResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -797,10 +928,11 @@ func (client *Client) BindHuanyu(request *BindHuanyuRequest) (_result *BindHuany
 	return _result, _err
 }
 
-/**
- * Description: huanyue
- * Summary: huanyu
- */
+// Description:
+//
+// Description: huanyue
+//
+// Summary: huanyu
 func (client *Client) BindHuanyuEx(request *BindHuanyuRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *BindHuanyuResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -815,10 +947,11 @@ func (client *Client) BindHuanyuEx(request *BindHuanyuRequest, headers map[strin
 	return _result, _err
 }
 
-/**
- * Description: tests
- * Summary: test
- */
+// Description:
+//
+// Description: tests
+//
+// Summary: test
 func (client *Client) BindTest(request *BindTestRequest) (_result *BindTestResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -831,10 +964,11 @@ func (client *Client) BindTest(request *BindTestRequest) (_result *BindTestRespo
 	return _result, _err
 }
 
-/**
- * Description: tests
- * Summary: test
- */
+// Description:
+//
+// Description: tests
+//
+// Summary: test
 func (client *Client) BindTestEx(request *BindTestRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *BindTestResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -849,10 +983,11 @@ func (client *Client) BindTestEx(request *BindTestRequest, headers map[string]*s
 	return _result, _err
 }
 
-/**
- * Description: testt
- * Summary: testt
- */
+// Description:
+//
+// Description: testt
+//
+// Summary: testt
 func (client *Client) QueryTestCcc(request *QueryTestCccRequest) (_result *QueryTestCccResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -865,10 +1000,11 @@ func (client *Client) QueryTestCcc(request *QueryTestCccRequest) (_result *Query
 	return _result, _err
 }
 
-/**
- * Description: testt
- * Summary: testt
- */
+// Description:
+//
+// Description: testt
+//
+// Summary: testt
 func (client *Client) QueryTestCccEx(request *QueryTestCccRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryTestCccResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -883,10 +1019,11 @@ func (client *Client) QueryTestCccEx(request *QueryTestCccRequest, headers map[s
 	return _result, _err
 }
 
-/**
- * Description: 1234
- * Summary: 1234
- */
+// Description:
+//
+// Description: 1234
+//
+// Summary: 1234
 func (client *Client) ImportAbcd(request *ImportAbcdRequest) (_result *ImportAbcdResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -899,10 +1036,11 @@ func (client *Client) ImportAbcd(request *ImportAbcdRequest) (_result *ImportAbc
 	return _result, _err
 }
 
-/**
- * Description: 1234
- * Summary: 1234
- */
+// Description:
+//
+// Description: 1234
+//
+// Summary: 1234
 func (client *Client) ImportAbcdEx(request *ImportAbcdRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *ImportAbcdResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -917,10 +1055,11 @@ func (client *Client) ImportAbcdEx(request *ImportAbcdRequest, headers map[strin
 	return _result, _err
 }
 
-/**
- * Description: cat测试适用，包含能力中心九期打标功能测试1
- * Summary: cat测试1
- */
+// Description:
+//
+// Description: cat测试适用，包含能力中心九期打标功能测试1
+//
+// Summary: cat测试1
 func (client *Client) QueryTestaTestb(request *QueryTestaTestbRequest) (_result *QueryTestaTestbResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -933,10 +1072,11 @@ func (client *Client) QueryTestaTestb(request *QueryTestaTestbRequest) (_result 
 	return _result, _err
 }
 
-/**
- * Description: cat测试适用，包含能力中心九期打标功能测试1
- * Summary: cat测试1
- */
+// Description:
+//
+// Description: cat测试适用，包含能力中心九期打标功能测试1
+//
+// Summary: cat测试1
 func (client *Client) QueryTestaTestbEx(request *QueryTestaTestbRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryTestaTestbResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -944,6 +1084,42 @@ func (client *Client) QueryTestaTestbEx(request *QueryTestaTestbRequest, headers
 	}
 	_result = &QueryTestaTestbResponse{}
 	_body, _err := client.DoRequest(tea.String("1.0"), tea.String("antcloud.cat.testa.testb.query"), tea.String("HTTPS"), tea.String("POST"), tea.String("/gateway.do"), tea.ToMap(request), headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_err = tea.Convert(_body, &_result)
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 工作台测试产品A
+//
+// Summary: 工作台测试产品A
+func (client *Client) AWorkbenchTest(request *AWorkbenchTestRequest) (_result *AWorkbenchTestResponse, _err error) {
+	runtime := &util.RuntimeOptions{}
+	headers := make(map[string]*string)
+	_result = &AWorkbenchTestResponse{}
+	_body, _err := client.AWorkbenchTestEx(request, headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = _body
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 工作台测试产品A
+//
+// Summary: 工作台测试产品A
+func (client *Client) AWorkbenchTestEx(request *AWorkbenchTestRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *AWorkbenchTestResponse, _err error) {
+	_err = util.ValidateModel(request)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = &AWorkbenchTestResponse{}
+	_body, _err := client.DoRequest(tea.String("1.0"), tea.String("antcloud.cat.workbench.test.a"), tea.String("HTTPS"), tea.String("POST"), tea.String("/gateway.do"), tea.ToMap(request), headers, runtime)
 	if _err != nil {
 		return _result, _err
 	}
